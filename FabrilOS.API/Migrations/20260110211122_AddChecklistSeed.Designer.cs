@@ -3,6 +3,7 @@ using System;
 using FabrilOS.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FabrilOS.API.Migrations
 {
     [DbContext(typeof(FabrilOSContext))]
-    partial class FabrilOSContextModelSnapshot : ModelSnapshot
+    [Migration("20260110211122_AddChecklistSeed")]
+    partial class AddChecklistSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
