@@ -32,4 +32,52 @@ public class ServiceOrderController : ControllerBase
 
     return CreatedAtAction(nameof(Create), new { id = createdOrder.Id }, createdOrder);
   }
+
+  [HttpGet]
+  public async Task<IActionResult> GetAll()
+  {
+    var userId = GetUserId();
+    var list = await _service.GetAllAsync(userId);
+    return Ok(list);
+  }
+
+  [HttpGet("{id}")]
+  public async Task<IActionResult> GetById(int id)
+  {
+    var userId = GetUserId();
+    var order = await _service.GetByIdAsync(id, userId);
+
+    if (order == null) return NotFound("Ordem de serviço não encontrada.");
+
+    return Ok(order);
+  }
+
+  [HttpPut("{id}")]
+  public async Task<IActionResult> Update(int id, [FromBody] UpdateServiceOrderDto dto)
+  {
+    var userId = GetUserId();
+    var success = await _service.UpdateAsync(id, userId, dto);
+
+    if (!success) return NotFound("Não foi possível atualizar (OS não encontrada).");
+
+    return Ok("Ordem de serviço atualizada com sucesso.");
+  }
+
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> Delete(int id)
+  {
+    var userId = GetUserId();
+    var success = await _service.DeleteAsync(id, userId);
+
+    if (!success) return NotFound("OS não encontrada.");
+
+    return Ok("Ordem de serviço excluída.");
+  }
+
+  private int GetUserId()
+  {
+    var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    int.TryParse(idClaim, out int userId);
+    return userId;
+  }
 }
