@@ -10,11 +10,17 @@ public class FabrilOSContext : DbContext
   }
 
   public DbSet<User> Users { get; set; }
+  public DbSet<ServiceOrder> ServiceOrders { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<User>()
         .HasIndex(u => u.Email)
         .IsUnique();
+
+    modelBuilder.Entity<ServiceOrder>()
+      .HasOne(s => s.User)
+      .WithMany()
+      .HasForeignKey(s => s.UserId);
   }
 }
