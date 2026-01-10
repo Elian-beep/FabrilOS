@@ -1,0 +1,29 @@
+## --- Build e Compilação do .NET ---
+[Bb]in/
+[Oo]bj/
+.config/
+*.user
+
+## --- IDEs (VS Code e Visual Studio) ---
+.vscode/
+.vs/
+*.suo
+*.userprefs
+
+*.env
+.env
+
+appsettings.Local.json
+appsettings.Development.local.json
+
+*.log
+*.tmp
+
+docker-compose.override.yml
+/data/
+/postgres_data/
+/minio_data/
+/pgadmin_data/
+
+Thumbs.db
+.DS_Store
