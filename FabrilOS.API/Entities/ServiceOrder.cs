@@ -13,4 +13,5 @@ public class ServiceOrder
     public int UserId { get; set; }
     [ForeignKey("UserId")]
     public User? User { get; set; }
+    public List<ServiceOrderChecklist> Checklists { get; set; } = new();
 }
