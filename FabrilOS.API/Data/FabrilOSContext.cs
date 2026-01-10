@@ -1,25 +1,20 @@
 using FabrilOS.API.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FabrilOS.API.Data;
 
-public class FabrilOSContext : IdentityDbContext<ApplicationUser>
+public class FabrilOSContext : DbContext
 {
-    public FabrilOSContext(DbContextOptions<FabrilOSContext> options) : base(options)
-    {
-    }
+  public FabrilOSContext(DbContextOptions<FabrilOSContext> options) : base(options)
+  {
+  }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
+  public DbSet<User> Users { get; set; }
 
-        builder.Entity<ApplicationUser>().ToTable("Users");
-        builder.Entity<IdentityRole>().ToTable("Roles");
-        builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
-        builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
-        builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
-        builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
-        builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-    }
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<User>()
+        .HasIndex(u => u.Email)
+        .IsUnique();
+  }
 }
