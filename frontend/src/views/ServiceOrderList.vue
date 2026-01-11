@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { ordersService } from '@/api/modules/ordersService';
 import BaseTable, { type TableHeader } from '@/components/BaseTable.vue';
 
+
 const router = useRouter();
+
+const queryClient = useQueryClient();
 
 const headers: TableHeader[] = [
   { title: '# ID', key: 'id', width: '80px', align: 'start' },
@@ -17,6 +20,19 @@ const { data: orders, isLoading, isError } = useQuery({
   queryKey: ['service-orders'],
   queryFn: ordersService.getAll,
   staleTime: 1000 * 60 * 5,
+});
+
+const { mutate: deleteOrder, isPending: isDeleting } = useMutation({
+  mutationFn: (id: number) => ordersService.delete(id),
+  
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['service-orders'] });
+  },
+  
+  onError: (error) => {
+    console.error(error);
+    alert('Erro ao excluir. Tente novamente.');
+  }
 });
 
 const formatDate = (dateString: string) => {
@@ -39,8 +55,11 @@ const handleCreateNew = () => {
 };
 
 const handleDelete = (id: number) => {
-  console.log('Deletar OS ID:', id);
-  alert(`Deletar a ordem ${id}? (Funcionalidade futura)`);
+  const confirmacao = window.confirm("Tem certeza que deseja excluir");
+  
+  if (confirmacao) {
+    deleteOrder(id);
+  }
 };
 </script>
 

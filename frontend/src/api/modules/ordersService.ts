@@ -29,5 +29,9 @@ export const ordersService = {
         'Content-Type': 'multipart/form-data',
       },
     });
+  },
+
+  async delete(id: number): Promise<void> {
+    await api.delete(`/ServiceOrder/${id}`);
   }
 };
