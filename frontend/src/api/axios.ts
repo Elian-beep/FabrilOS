@@ -25,12 +25,22 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => {
-    // Retorna a resposta limpa se der sucesso
-    return response;
-  },
-  async (error: AxiosError) => {
-    console.log('Atualização de token de acesso');
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response && error.response.status === 401) {
+      console.warn(
+        'Sessão expirada ou token inválido. Redirecionando para login.'
+      );
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
 
     return Promise.reject(error);
   }
