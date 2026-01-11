@@ -13,6 +13,7 @@ public class FabrilOSContext : DbContext
   public DbSet<ServiceOrder> ServiceOrders { get; set; }
   public DbSet<ChecklistItem> ChecklistItems { get; set; }
   public DbSet<ServiceOrderChecklist> ServiceOrderChecklists { get; set; }
+  public DbSet<ServiceOrderImage> ServiceOrderImages { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
