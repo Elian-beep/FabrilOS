@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-import { toRef, ref, watch, onUnmounted } from 'vue';
+import { toRef } from 'vue';
 
 interface Props {
   name: string;
@@ -17,31 +17,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const nameRef = toRef(props, 'name');
 const { value, errorMessage, handleBlur, handleChange } = useField<File[] | null>(nameRef);
-
-const previewUrl = ref<string | null>(null);
-
-watch(value, (newFiles) => {
-  if (previewUrl.value) {
-    URL.revokeObjectURL(previewUrl.value);
-    previewUrl.value = null;
-  }
-
-  if (newFiles && newFiles.length > 0) {
-    const file = newFiles[0];
-    if (file && file.type.startsWith('image/')) {
-      previewUrl.value = URL.createObjectURL(file);
-    }
-  }
-});
-
-onUnmounted(() => {
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
-});
 </script>
 
 <template>
   <div class="mb-4">
-
     <v-file-input
       v-model="value"
       :id="name"
