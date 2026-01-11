@@ -11,4 +11,5 @@ public interface IServiceOrderService
   Task<bool> UpdateAsync(int id, int userId, UpdateServiceOrderDto dto);
   Task<bool> DeleteAsync(int id, int userId);
   Task<bool> AddImageAsync(int serviceOrderId, int userId, IFormFile file);
+  Task<List<ChecklistItem>> GetChecklistCatalogAsync();
 }

@@ -165,4 +165,11 @@ public class ServiceOrderService : IServiceOrderService
     await _context.SaveChangesAsync();
     return true;
   }
+
+  public async Task<List<ChecklistItem>> GetChecklistCatalogAsync()
+  {
+    return await _context.ChecklistItems
+      .Where(x => x.IsActive)
+      .ToListAsync();
+  }
 }

@@ -94,4 +94,11 @@ public class ServiceOrderController : ControllerBase
     int.TryParse(idClaim, out int userId);
     return userId;
   }
+
+  [HttpGet("checklist-items")]
+  public async Task<IActionResult> GetChecklistCatalog()
+  {
+    var items = await _service.GetChecklistCatalogAsync();
+    return Ok(items);
+  }
 }
