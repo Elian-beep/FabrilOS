@@ -30,7 +30,7 @@ npm install
 npm run dev
 ```
 
-Obs: A execução local esta configurada na porta 5173 e o container na porta 8080
+Obs: A execução local esta configurada na porta 5173 e o container na porta 3000
 
 ## Trabalhos futuros
 

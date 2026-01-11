@@ -35,6 +35,7 @@ const schema = toTypedSchema(
     orderImage: yup
       .mixed()
       // .nullable()
+      .required('Uma imagem é obrigatória')
       .test('fileSize', 'O arquivo deve ter no máximo 5MB', (value: any) => {
         if (!value || (Array.isArray(value) && value.length === 0)) return true;
         const file = Array.isArray(value) ? value[0] : value;

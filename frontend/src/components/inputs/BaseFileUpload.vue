@@ -30,8 +30,7 @@ const { value, errorMessage, handleBlur, handleChange } = useField<File[] | null
       :prepend-icon="prependIcon"
       variant="outlined"
       color="primary"
-      show-size
-      counter
+      :show-size="!!value"
       clearable
       @blur="handleBlur"
       @update:model-value="handleChange"
