@@ -33,6 +33,20 @@ public class ServiceOrderController : ControllerBase
     return CreatedAtAction(nameof(Create), new { id = createdOrder.Id }, createdOrder);
   }
 
+  [HttpPost("{id}/images")]
+  public async Task<IActionResult> UploadImage(int id, IFormFile file)
+  {
+    if (file == null || file.Length == 0)
+      return BadRequest("Arquivo inválido.");
+
+    var userId = GetUserId();
+    var success = await _service.AddImageAsync(id, userId, file);
+
+    if (!success) return NotFound("OS não encontrada.");
+
+    return Ok("Imagem enviada com sucesso!");
+  }
+
   [HttpGet]
   public async Task<IActionResult> GetAll()
   {

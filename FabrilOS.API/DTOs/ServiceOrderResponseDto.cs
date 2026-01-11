@@ -9,6 +9,7 @@ public class ServiceOrderResponseDto
   public string UserName { get; set; } = string.Empty;
 
   public List<ChecklistItemDto> Checklists { get; set; } = new();
+  public List<string> ImageUrls { get; set; }
 }
 
 public class ChecklistItemDto

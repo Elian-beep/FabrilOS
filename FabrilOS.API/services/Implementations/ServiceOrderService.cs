@@ -9,10 +9,12 @@ namespace FabrilOS.API.Services.Implementations;
 public class ServiceOrderService : IServiceOrderService
 {
   private readonly FabrilOSContext _context;
+  private readonly IFileStorageService _storageService;
 
-  public ServiceOrderService(FabrilOSContext context)
+  public ServiceOrderService(FabrilOSContext context, IFileStorageService storageService)
   {
     _context = context;
+    _storageService = storageService;
   }
 
   public async Task<ServiceOrder> CreateAsync(CreateServiceOrderDto dto, int userId)
@@ -49,6 +51,25 @@ public class ServiceOrderService : IServiceOrderService
     return serviceOrder;
   }
 
+  public async Task<bool> AddImageAsync(int serviceOrderId, int userId, IFormFile file)
+  {
+    var os = await _context.ServiceOrders.FirstOrDefaultAsync(x => x.Id == serviceOrderId && x.UserId == userId);
+    if (os == null) return false;
+
+    var fileName = await _storageService.UploadFileAsync(file);
+
+    var imageEntity = new ServiceOrderImage
+    {
+      ServiceOrderId = serviceOrderId,
+      FileName = fileName
+    };
+
+    _context.ServiceOrderImages.Add(imageEntity);
+    await _context.SaveChangesAsync();
+
+    return true;
+  }
+
   public async Task<List<ServiceOrderResponseDto>> GetAllAsync(int userId)
   {
     var orders = await _context.ServiceOrders
@@ -72,14 +93,15 @@ public class ServiceOrderService : IServiceOrderService
   public async Task<ServiceOrderResponseDto?> GetByIdAsync(int id, int userId)
   {
     var os = await _context.ServiceOrders
-      .Include(x => x.User)
-      .Include(x => x.Checklists)
-        .ThenInclude(x => x.ChecklistItem)
-      .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+        .Include(x => x.User)
+        .Include(x => x.Checklists)
+            .ThenInclude(x => x.ChecklistItem)
+        .Include(x => x.Images)
+        .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
     if (os == null) return null;
 
-    return new ServiceOrderResponseDto
+    var response = new ServiceOrderResponseDto
     {
       Id = os.Id,
       Title = os.Title,
@@ -92,8 +114,20 @@ public class ServiceOrderService : IServiceOrderService
         ChecklistItemId = c.ChecklistItemId,
         Label = c.ChecklistItem!.Label,
         IsChecked = c.IsChecked
-      }).ToList()
+      }).ToList(),
+      ImageUrls = new List<string>()
     };
+
+    if (os.Images != null)
+    {
+      foreach (var image in os.Images)
+      {
+        var url = await _storageService.GetPresignedUrlAsync(image.FileName);
+        response.ImageUrls.Add(url);
+      }
+    }
+
+    return response;
   }
 
   public async Task<bool> UpdateAsync(int id, int userId, UpdateServiceOrderDto dto)

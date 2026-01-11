@@ -13,5 +13,6 @@ public class ServiceOrder
     [ForeignKey("UserId")]
     public User? User { get; set; }
     public List<ServiceOrderChecklist> Checklists { get; set; } = new();
+    public List<ServiceOrderImage> Images { get; set; } = new();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
