@@ -4,6 +4,8 @@ import Login from '@/views/Login.vue';
 import ServiceOrderList from '@/views/ServiceOrderList.vue';
 import ServiceOrderCreate from '@/views/ServiceOrderCreate.vue';
 
+import '@/styles.css';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,7 +13,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: false, layout: 'auth' },
     },
     {
       path: '/',
@@ -21,13 +23,13 @@ const router = createRouter({
       path: '/orders',
       name: 'orders-list',
       component: ServiceOrderList,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, layout: 'default' },
     },
     {
       path: '/orders/new',
       name: 'orders-create',
       component: ServiceOrderCreate,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, layout: 'default' },
     },
   ],
 });
