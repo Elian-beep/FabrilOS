@@ -20,7 +20,7 @@ cd FabrilOS
 
 Execução via Docker
 ```bash
-docker-compose -f devops/docker-compose.yml up -d --build
+docker-compose docker-compose.yml up -d --build
 ```
 
 Execução local
