@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabrilOS.API", "FabrilOS.API\FabrilOS.API.csproj", "{19A46B01-56BD-4493-A23D-B74845926279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabrilOS.Tests", "FabrilOS.Tests\FabrilOS.Tests.csproj", "{C329B55E-0C49-4A96-B582-E02897DAF662}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{19A46B01-56BD-4493-A23D-B74845926279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19A46B01-56BD-4493-A23D-B74845926279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19A46B01-56BD-4493-A23D-B74845926279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C329B55E-0C49-4A96-B582-E02897DAF662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C329B55E-0C49-4A96-B582-E02897DAF662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C329B55E-0C49-4A96-B582-E02897DAF662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C329B55E-0C49-4A96-B582-E02897DAF662}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
