@@ -10,8 +10,10 @@ import BaseInput from '@/components/inputs/BaseInput.vue';
 import BaseTextarea from '@/components/inputs/BaseTextarea.vue';
 import BaseChecklist from '@/components/inputs/BaseChecklist.vue';
 import BaseFileUpload from '@/components/inputs/BaseFileUpload.vue';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
+const queryClient = useQueryClient();
 
 const { data: availableServices, isLoading: isLoadingChecklist } = useQuery({
   queryKey: ['checklist-items'],
@@ -76,6 +78,8 @@ const onSubmit = handleSubmit(async (values) => {
       }
     }
 
+    await queryClient.invalidateQueries({ queryKey: ['service-orders'] });
+    
     alert('Ordem de Serviço criada com sucesso!');
     router.push('/orders');
 
