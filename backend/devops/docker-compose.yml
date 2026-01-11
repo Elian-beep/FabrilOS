@@ -17,6 +17,8 @@ services:
       - Minio__BucketName=service-order-images
       - Minio__UseSSL=false
       - ASPNETCORE_HTTP_PORTS=8080
+
+      - Jwt__Key=kjlhKLUHybad98dbewd3deajklndsdaljkfhsalaÇOaw354jçwlwjaÇRTILAW4JT409KLVSD
     ports:
       - "8080:8080"
     depends_on:
