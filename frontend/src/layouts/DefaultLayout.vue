@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar title="Sistema OS" color="primary"></v-app-bar>
+  <v-app-bar title="Fabril OS" color="primary"></v-app-bar>
 
   <v-main class="bg-grey-lighten-5">
     <v-container class="py-6 page-container">
