@@ -23,7 +23,7 @@ docker-compose -f devops/docker-compose.yml up -d --build
 
 Execução local
 ```bash
-cd FabrilOS.API
+cd backend/FabrilOS.API
 dotnet build
 dotnet run
 ```

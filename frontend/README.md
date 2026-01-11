@@ -1,42 +1,40 @@
-# frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+## Stack utilizada
 
-## Recommended IDE Setup
+| ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) | ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D) |
+|--------------|--|
+| ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) | ![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=AEDDFF) |
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Pré-requisitos
 
-## Recommended Browser Setup
+- [Node](https://nodejs.org/pt)
+- [Backend](https://github.com/Elian-beep/FabrilOS/tree/main)
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Instalação e execução
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+Clonar o Repositório
+```bash
+git clone https://github.com/seu-usuario/FabrilOS.git
+cd FabrilOS
 ```
 
-### Compile and Hot-Reload for Development
+Execução via Docker
+```bash
+docker-compose -f devops/docker-compose.yml up -d --build
+```
 
-```sh
+Execução local
+```bash
+cd frontend
+npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Obs: A execução local esta configurada na porta 5173 e o container na porta 8080
 
-```sh
-npm run build
-```
+## Trabalhos futuros
+
+- Tela 404 padrão
+- Registro de usuário ao lado do login
+- Interceptor para limpar token caso ocorra um 401
+
