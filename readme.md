@@ -81,3 +81,10 @@ Obs: A execução local esta configurada na porta 5102 e o container na porta 80
 | :---------- | :--------- | :---------------------------------- |
 | `id` | `string` | Id da ordem de serviço |
 | `file` | `file` | Upload da imagem |
+
+## Trabalhos futuros
+
+- Aplicações de logs e monitoramento utilizando Serilog
+- Validações de criação de usuário (senha)
+- Exportação DOC do documento
+
