@@ -8,14 +8,14 @@ services:
     image: fabrilos-api
     container_name: fabrilos-api
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      
       - ConnectionStrings__DefaultConnection=Host=fabrilos-postgres;Port=5432;Database=fabrilos_db;Username=admin;Password=password;Include Error Detail=true
-        
       - Minio__Endpoint=fabrilos-minio:9000
       - Minio__AccessKey=admin
       - Minio__SecretKey=password
       - Minio__BucketName=service-order-images
       - Minio__UseSSL=false
-        
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8080:8080"
@@ -23,6 +23,8 @@ services:
       - db
       - minio
     restart: on-failure
+    networks:
+      - fabrilos-network
 
   db:
     image: postgres:16
@@ -36,6 +38,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
+    networks:
+      - fabrilos-network
 
   minio:
     image: minio/minio
@@ -50,6 +54,8 @@ services:
     volumes:
       - minio_data:/data
     restart: always
+    networks:
+      - fabrilos-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -62,8 +68,14 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     restart: always
+    networks:
+      - fabrilos-network
 
 volumes:
   postgres_data:
   minio_data:
   pgadmin_data:
+
+networks:
+  fabrilos-network:
+    driver: bridge

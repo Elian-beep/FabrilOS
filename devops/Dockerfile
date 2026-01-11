@@ -14,5 +14,6 @@ RUN dotnet publish "FabrilOS.API.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+EXPOSE 8080
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "FabrilOS.API.dll"]

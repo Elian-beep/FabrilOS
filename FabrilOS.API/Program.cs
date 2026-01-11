@@ -93,4 +93,38 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+  var services = scope.ServiceProvider;
+  var logger = services.GetRequiredService<ILogger<Program>>();
+  var dbContext = services.GetRequiredService<FabrilOSContext>();
+
+  try
+  {
+    logger.LogInformation("Tentando aplicar migrações...");
+
+    var tentativas = 0;
+    var maxTentativas = 5;
+
+    while (tentativas < maxTentativas)
+    {
+      if (dbContext.Database.CanConnect())
+      {
+        dbContext.Database.Migrate();
+        logger.LogInformation("Migrações aplicadas com sucesso!");
+        break;
+      }
+
+      tentativas++;
+      logger.LogWarning($"Banco ainda indisponível. Tentativa {tentativas}/{maxTentativas}. Aguardando 3s...");
+      Thread.Sleep(3000);
+    }
+  }
+  catch (Exception ex)
+  {
+    logger.LogError(ex, "Falha crítica ao aplicar migrações.");
+  }
+}
+
 app.Run();
