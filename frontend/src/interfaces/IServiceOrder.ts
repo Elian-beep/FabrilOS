@@ -3,3 +3,16 @@ export interface IServiceOrder {
   title: string;
   createdAt: string;
 }
+
+export interface CreateOrderPayload {
+  title: string;
+  description: string;
+  checklistItemIds: number[];
+}
+
+export interface ServiceOrderResponse {
+  id: number;
+  title: string;
+  description: string;
+  userId: number; 
+}
