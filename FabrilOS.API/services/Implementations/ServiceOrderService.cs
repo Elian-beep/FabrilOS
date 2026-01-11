@@ -25,20 +25,21 @@ public class ServiceOrderService : IServiceOrderService
       CreatedAt = DateTime.UtcNow,
     };
 
-    if (dto.ChecklistItemIds.Any())
-    {
-      foreach (var itemId in dto.ChecklistItemIds)
-      {
-        var itemExists = await _context.ChecklistItems.AnyAsync(c => c.Id == itemId);
+    var allChecklistItems = await _context.ChecklistItems
+      .Where(c => c.IsActive)
+      .ToListAsync();
 
-        if (itemExists)
+    if (allChecklistItems.Any())
+    {
+      foreach (var item in allChecklistItems)
+      {
+        bool isSelected = dto.ChecklistItemIds != null && dto.ChecklistItemIds.Contains(item.Id);
+
+        serviceOrder.Checklists.Add(new ServiceOrderChecklist
         {
-          serviceOrder.Checklists.Add(new ServiceOrderChecklist
-          {
-            ChecklistItemId = itemId,
-            IsChecked = false
-          });
-        }
+          ChecklistItemId = item.Id,
+          IsChecked = isSelected
+        });
       }
     }
 
@@ -51,19 +52,19 @@ public class ServiceOrderService : IServiceOrderService
   public async Task<List<ServiceOrderResponseDto>> GetAllAsync(int userId)
   {
     var orders = await _context.ServiceOrders
-        .Where(os => os.UserId == userId)
-        .Include(os => os.User)
-        .OrderByDescending(os => os.CreatedAt)
-        .Select(os => new ServiceOrderResponseDto
-        {
-          Id = os.Id,
-          Title = os.Title,
-          Description = os.Description,
-          CreatedAt = os.CreatedAt,
-          UserName = os.User!.Name,
-          Checklists = new List<ChecklistItemDto>()
-        })
-        .ToListAsync();
+      .Where(os => os.UserId == userId)
+      .Include(os => os.User)
+      .OrderByDescending(os => os.CreatedAt)
+      .Select(os => new ServiceOrderResponseDto
+      {
+        Id = os.Id,
+        Title = os.Title,
+        Description = os.Description,
+        CreatedAt = os.CreatedAt,
+        UserName = os.User!.Name,
+        Checklists = new List<ChecklistItemDto>()
+      })
+      .ToListAsync();
 
     return orders;
   }
@@ -71,10 +72,10 @@ public class ServiceOrderService : IServiceOrderService
   public async Task<ServiceOrderResponseDto?> GetByIdAsync(int id, int userId)
   {
     var os = await _context.ServiceOrders
-        .Include(x => x.User)
-        .Include(x => x.Checklists)
-            .ThenInclude(x => x.ChecklistItem)
-        .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+      .Include(x => x.User)
+      .Include(x => x.Checklists)
+        .ThenInclude(x => x.ChecklistItem)
+      .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
     if (os == null) return null;
 
@@ -98,8 +99,8 @@ public class ServiceOrderService : IServiceOrderService
   public async Task<bool> UpdateAsync(int id, int userId, UpdateServiceOrderDto dto)
   {
     var os = await _context.ServiceOrders
-        .Include(x => x.Checklists)
-        .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+      .Include(x => x.Checklists)
+      .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
     if (os == null) return false;
 
@@ -108,20 +109,11 @@ public class ServiceOrderService : IServiceOrderService
 
     if (dto.ChecklistItemIds != null)
     {
-      _context.ServiceOrderChecklists.RemoveRange(os.Checklists);
-
-      foreach (var itemId in dto.ChecklistItemIds)
+      foreach (var existingLink in os.Checklists)
       {
-        var itemExists = await _context.ChecklistItems.AnyAsync(c => c.Id == itemId);
+        bool shouldBeChecked = dto.ChecklistItemIds.Contains(existingLink.ChecklistItemId);
 
-        if (itemExists)
-        {
-          os.Checklists.Add(new ServiceOrderChecklist
-          {
-            ChecklistItemId = itemId,
-            IsChecked = false
-          });
-        }
+        existingLink.IsChecked = shouldBeChecked;
       }
     }
 
