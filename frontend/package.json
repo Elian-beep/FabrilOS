@@ -14,8 +14,13 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.92.5",
+    "@vee-validate/yup": "^4.15.1",
+    "axios": "^1.13.2",
     "pinia": "^3.0.4",
-    "vue": "^3.5.26"
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.26",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
