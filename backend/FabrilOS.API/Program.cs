@@ -58,6 +58,16 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowFrontend", policy =>
+  {
+    policy.WithOrigins("*")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+  });
+});
+
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
 builder.Services.AddAuthentication(options =>
 {
@@ -81,6 +91,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 app.UseExceptionHandler();
 app.UseAuthentication();
