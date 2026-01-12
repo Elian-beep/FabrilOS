@@ -7,17 +7,25 @@ namespace FabrilOS.API.Services.Implementations;
 public class MinioStorageService : IFileStorageService
 {
   private readonly IMinioClient _minioClient;
+  private readonly IMinioClient _internalClient;
   private readonly string _bucketName;
+  private readonly string _accessKey;
+  private readonly string _secretKey;
+  private readonly bool _useSSL;
 
   public MinioStorageService(IConfiguration configuration)
   {
     var minioConfig = configuration.GetSection("Minio");
     _bucketName = minioConfig["BucketName"] ?? "service-order-images";
 
-    _minioClient = new MinioClient()
+    _accessKey = minioConfig["AccessKey"];
+    _secretKey = minioConfig["SecretKey"];
+    _useSSL = Convert.ToBoolean(minioConfig["UseSSL"]);
+
+    _internalClient = new MinioClient()
       .WithEndpoint(minioConfig["Endpoint"])
-      .WithCredentials(minioConfig["AccessKey"], minioConfig["SecretKey"])
-      .WithSSL(Convert.ToBoolean(minioConfig["UseSSL"]))
+      .WithCredentials(_accessKey, _secretKey)
+      .WithSSL(_useSSL)
       .Build();
   }
 
@@ -39,18 +47,23 @@ public class MinioStorageService : IFileStorageService
       .WithObjectSize(stream.Length)
       .WithContentType(file.ContentType);
 
-    await _minioClient.PutObjectAsync(putObjectArgs);
-
+    await _internalClient.PutObjectAsync(putObjectArgs);
     return fileName;
   }
 
   public async Task<string> GetPresignedUrlAsync(string fileName)
   {
+    var externalClient = new MinioClient()
+      .WithEndpoint("localhost", 9000)
+      .WithCredentials(_accessKey, _secretKey)
+      .WithSSL(_useSSL)
+      .Build();
+
     var args = new PresignedGetObjectArgs()
       .WithBucket(_bucketName)
       .WithObject(fileName)
       .WithExpiry(60 * 60 * 24);
 
-    return await _minioClient.PresignedGetObjectAsync(args);
+    return await externalClient.PresignedGetObjectAsync(args);
   }
 }
