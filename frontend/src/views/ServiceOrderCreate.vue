@@ -93,6 +93,15 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <v-container>
+    <v-btn 
+      variant="text" 
+      prepend-icon="mdi-arrow-left" 
+      class="mb-4"
+      @click="router.back()"
+    >
+      Voltar
+    </v-btn>
+    
     <div class="mb-6">
       <h1 class="text-h5 text-primary font-weight-bold">Nova Ordem de Serviço</h1>
     </div>

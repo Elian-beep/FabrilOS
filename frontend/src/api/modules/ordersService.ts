@@ -1,6 +1,6 @@
 import api from '@/api/axios';
 import type { IChecklistItem } from '@/interfaces/IChecklistItem';
-import type { CreateOrderPayload, IServiceOrder, ServiceOrderResponse } from '@/interfaces/IServiceOrder';
+import type { CreateOrderPayload, IServiceOrder, ServiceOrderDetail, ServiceOrderResponse } from '@/interfaces/IServiceOrder';
 
 export const ordersService = {
   async getAll(): Promise<IServiceOrder[]> {
@@ -33,5 +33,10 @@ export const ordersService = {
 
   async delete(id: number): Promise<void> {
     await api.delete(`/ServiceOrder/${id}`);
+  },
+
+  async getById(id: number): Promise<ServiceOrderDetail> {
+    const { data } = await api.get<ServiceOrderDetail>(`/ServiceOrder/${id}`);
+    return data;
   }
 };

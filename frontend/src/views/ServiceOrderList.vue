@@ -12,7 +12,7 @@ const queryClient = useQueryClient();
 const headers: TableHeader[] = [
   { title: '# ID', key: 'id', width: '80px', align: 'start' },
   { title: 'Título da OS', key: 'title', align: 'start' },
-  { title: 'Data de Criação', key: 'createdAt', align: 'end' },
+  { title: 'Data de Criação', key: 'createdAt', align: 'start' },
   { title: 'Ações', key: 'actions', width: '100px', align: 'end', sortable: false },
 ];
 
@@ -103,18 +103,34 @@ const handleDelete = (id: number) => {
       </template>
 
       <template #item.actions="{ item }">
-        <v-tooltip text="Excluir OS" location="top">
-          <template #activator="{ props }">
-            <v-btn 
-              v-bind="props"
-              icon="mdi-trash-can-outline" 
-              variant="text" 
-              color="error" 
-              density="comfortable"
-              @click="handleDelete(item.id)"
-            ></v-btn>
-          </template>
-        </v-tooltip>
+        <div class="d-flex flex-row">
+          <v-tooltip text="Visualizar Detalhes" location="top">
+            <template #activator="{ props }">
+              <v-btn 
+                v-bind="props"
+                icon="mdi-eye-outline" 
+                variant="text" 
+                color="primary" 
+                density="comfortable"
+                class="mr-1"
+                @click="router.push(`/orders/${item.id}`)"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+  
+          <v-tooltip text="Excluir OS" location="top">
+            <template #activator="{ props }">
+              <v-btn 
+                v-bind="props"
+                icon="mdi-trash-can-outline" 
+                variant="text" 
+                color="error" 
+                density="comfortable"
+                @click="handleDelete(item.id)"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+        </div>
       </template>
 
     </BaseTable>

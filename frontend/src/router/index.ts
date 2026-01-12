@@ -5,6 +5,7 @@ import ServiceOrderList from '@/views/ServiceOrderList.vue';
 import ServiceOrderCreate from '@/views/ServiceOrderCreate.vue';
 
 import '@/styles.css';
+import ServiceOrderDetail from '@/views/ServiceOrderDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
       component: ServiceOrderCreate,
       meta: { requiresAuth: true, layout: 'default' },
     },
+    {
+      path: '/orders/:id',
+      name: 'order-detail',
+      component: ServiceOrderDetail,
+      meta: { requiresAuth: true }
+    }
   ],
 });
 

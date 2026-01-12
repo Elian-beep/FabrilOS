@@ -14,5 +14,22 @@ export interface ServiceOrderResponse {
   id: number;
   title: string;
   description: string;
-  userId: number; 
+  userId: number;
+}
+
+export interface ServiceOrderDetail {
+  id: number;
+  title: string;
+  description: string;
+  createdAt: string;
+  userName?: string; //
+
+  checklists: Array<{
+    id: number;
+    checklistItemId: number;
+    label: string;
+    isChecked: boolean;
+  }>;
+
+  imageUrls: string[];
 }
