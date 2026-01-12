@@ -73,20 +73,15 @@ const formatDate = (dateString?: string) => {
           Foto do Equipamento
         </label>
         <v-card class="d-inline-block rounded-lg overflow-hidden border">
-          <v-img
-            :src="order.imageUrls[0]" 
-            width="100%"
-            max-width="400"
-            max-height="300"
-            cover
-            class="bg-grey-lighten-2"
-          >
-            <template #placeholder>
-              <div class="d-flex align-center justify-center fill-height">
-                <v-progress-circular indeterminate color="grey-lighten-4"></v-progress-circular>
-              </div>
-            </template>
-          </v-img>
+          <v-card class="rounded-lg overflow-hidden border" width="fit-content"> 
+            <v-img
+              :src="order.imageUrls[0]" 
+              width="400"  max-width="100%"
+              height="auto"
+              cover
+              class="bg-grey-lighten-2"
+            ></v-img>
+          </v-card>
         </v-card>
       </div>
 
