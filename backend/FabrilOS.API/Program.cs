@@ -116,10 +116,10 @@ using (var scope = app.Services.CreateScope())
   {
     logger.LogInformation("Tentando aplicar migrações...");
 
-    var tentativas = 0;
-    var maxTentativas = 5;
+    var tries = 0;
+    var maxTries = 5;
 
-    while (tentativas < maxTentativas)
+    while (tries < maxTries)
     {
       if (dbContext.Database.CanConnect())
       {
@@ -128,8 +128,8 @@ using (var scope = app.Services.CreateScope())
         break;
       }
 
-      tentativas++;
-      logger.LogWarning($"Banco ainda indisponível. Tentativa {tentativas}/{maxTentativas}. Aguardando 3s...");
+      tries++;
+      logger.LogWarning($"Banco ainda indisponível. Tentativa {tries}/{maxTries}. Aguardando 3s...");
       Thread.Sleep(3000);
     }
   }
