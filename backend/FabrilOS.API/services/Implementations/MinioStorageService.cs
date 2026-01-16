@@ -32,22 +32,26 @@ public class MinioStorageService : IFileStorageService
   public async Task<string> UploadFileAsync(IFormFile file)
   {
     var foundArgs = new BucketExistsArgs().WithBucket(_bucketName);
-    if (!await _minioClient.BucketExistsAsync(foundArgs))
+
+    bool found = await _internalClient.BucketExistsAsync(foundArgs);
+
+    if (!found)
     {
-      await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucketName));
+      await _internalClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucketName));
     }
 
     var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
     using var stream = file.OpenReadStream();
     var putObjectArgs = new PutObjectArgs()
-      .WithBucket(_bucketName)
-      .WithObject(fileName)
-      .WithStreamData(stream)
-      .WithObjectSize(stream.Length)
-      .WithContentType(file.ContentType);
+        .WithBucket(_bucketName)
+        .WithObject(fileName)
+        .WithStreamData(stream)
+        .WithObjectSize(stream.Length)
+        .WithContentType(file.ContentType);
 
     await _internalClient.PutObjectAsync(putObjectArgs);
+
     return fileName;
   }
 
