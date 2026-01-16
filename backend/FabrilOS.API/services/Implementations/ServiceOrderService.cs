@@ -53,21 +53,51 @@ public class ServiceOrderService : IServiceOrderService
 
   public async Task<bool> AddImageAsync(int serviceOrderId, int userId, IFormFile file)
   {
-    var os = await _context.ServiceOrders.FirstOrDefaultAsync(x => x.Id == serviceOrderId && x.UserId == userId);
-    if (os == null) return false;
-
-    var fileName = await _storageService.UploadFileAsync(file);
-
-    var imageEntity = new ServiceOrderImage
+    try
     {
-      ServiceOrderId = serviceOrderId,
-      FileName = fileName
-    };
+      Console.WriteLine($"[DEBUG] Iniciando AddImageAsync. OS: {serviceOrderId}, User: {userId}");
 
-    _context.ServiceOrderImages.Add(imageEntity);
-    await _context.SaveChangesAsync();
+      var os = await _context.ServiceOrders.FirstOrDefaultAsync(x => x.Id == serviceOrderId && x.UserId == userId);
 
-    return true;
+      if (os == null)
+      {
+        Console.WriteLine($"[ERRO] OS não encontrada para este usuário.");
+        return false;
+      }
+
+      Console.WriteLine($"[DEBUG] Iniciando upload no StorageService...");
+      var fileName = await _storageService.UploadFileAsync(file);
+      Console.WriteLine($"[DEBUG] Upload concluído. Arquivo gerado: {fileName}");
+
+      var imageEntity = new ServiceOrderImage
+      {
+        ServiceOrderId = serviceOrderId,
+        FileName = fileName
+      };
+
+      _context.ServiceOrderImages.Add(imageEntity);
+
+      Console.WriteLine($"[DEBUG] Salvando referência no banco de dados...");
+      await _context.SaveChangesAsync();
+
+      Console.WriteLine($"[SUCCESS] Imagem salva com sucesso.");
+      return true;
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine("=================================================");
+      Console.WriteLine($"[CRITICAL ERROR] Erro ao adicionar imagem:");
+      Console.WriteLine($"MENSAGEM: {ex.Message}");
+      Console.WriteLine($"STACK TRACE: {ex.StackTrace}");
+
+      if (ex.InnerException != null)
+      {
+        Console.WriteLine($"INNER EXCEPTION: {ex.InnerException.Message}");
+      }
+      Console.WriteLine("=================================================");
+
+      throw;
+    }
   }
 
   public async Task<List<ServiceOrderResponseDto>> GetAllAsync(int userId)
